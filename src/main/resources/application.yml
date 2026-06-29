@@ -1,0 +1,42 @@
+info:
+  name: 模型对接
+  contact: yzjyhp
+
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: open-ai-chat
+
+#AI配置文件
+ai:
+  alibaba:
+    apiKey: "sk-abc"
+    model:
+      - "qwen3-max"
+      - "qwen3.5-plus"
+      - "qwen3.6-plus"
+    multi_modal:
+      - "qwen3.5-plus"
+      - "qwen3.6-plus"
+    enable_search:
+      - "qwen3.5-plus"
+    enable_thinking:
+      - "qwen3.5-plus"
+
+  volcengine:
+    apiKey: "abc"
+    model:
+      - "doubao-seed-1-6-251015"
+      - "deepseek-v3-2-251201"
+    mapping:
+      'deepseek-v3-2-251201': "deepseek-v3-2-251201"
+
+  baidu:
+    apiKey: "bce-abc"
+    model:
+      - "DeepSeek-V3-250324"
+    mapping:
+      'DeepSeek-V3-250324': "deepseek-v3"
