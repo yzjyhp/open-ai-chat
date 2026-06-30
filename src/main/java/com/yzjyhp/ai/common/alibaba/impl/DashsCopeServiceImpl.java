@@ -66,14 +66,29 @@ public class DashsCopeServiceImpl implements DashsCopeService {
         for (int kt = 0; kt < messageList.size(); kt++) {
             AiChatSseConnectMessageParams p = messageList.get(kt);
             if (p != null) {
-                List<Map<String, Object>> content = new ArrayList<>();
-                Map<String, Object> map = new HashMap<>();
-                map.put("text", p.getContent());
-                content.add(map);
-                MultiModalMessage message = MultiModalMessage.builder()
-                        .role(p.getRole())
-                        .content(content).build();
-                messages.add(message);
+                Object contentObj=p.getContent();
+                if(contentObj instanceof String){
+                    List<Map<String, Object>> content = new ArrayList<>();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("text", (String)contentObj);
+                    content.add(map);
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content(content).build();
+                    messages.add(message);
+                }else if(contentObj instanceof List){
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content((List<Map<String, Object>>) contentObj).build();
+                    messages.add(message);
+                }else if(contentObj instanceof Map){
+                    List<Map<String, Object>> content = new ArrayList<>();
+                    content.add((Map<String, Object>) contentObj);
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content(content).build();
+                    messages.add(message);
+                }
             }
         }
 
@@ -158,16 +173,7 @@ public class DashsCopeServiceImpl implements DashsCopeService {
                     model.setDelta(chatMessage);
                     List<Map<String, Object>> content = message.getContent();
                     if (content != null && !content.isEmpty()) {
-                        Map<String, Object> m0 = content.get(0);
-                        if (m0 != null) {
-                            Object text = m0.get("text");
-                            if (text instanceof String) {
-                                chatMessage.setContent((String) text);
-                            } else {
-                                String msg = JSON.toJSONString(text);
-                                chatMessage.setContent(msg);
-                            }
-                        }
+                        chatMessage.setContent(content);
                     }
                     choices2.add(model);
                 }
@@ -238,7 +244,14 @@ public class DashsCopeServiceImpl implements DashsCopeService {
         for (int kt = 0; kt < messageList.size(); kt++) {
             AiChatSseConnectMessageParams p = messageList.get(kt);
             if (p != null) {
-                Message userMsg = Message.builder().role(p.getRole()).content(p.getContent()).build();
+                Object contentObj=p.getContent();
+                String content="";
+                if(contentObj instanceof String){
+                    content=(String)contentObj;
+                }else {
+                    content=JSON.toJSONString(contentObj);
+                }
+                Message userMsg = Message.builder().role(p.getRole()).content(content).build();
                 messages.add(userMsg);
             }
         }
@@ -371,7 +384,16 @@ public class DashsCopeServiceImpl implements DashsCopeService {
         for (int kt = 0; kt < messageList.size(); kt++) {
             AiChatSseConnectMessageParams p = messageList.get(kt);
             if (p != null) {
-                Message userMsg = Message.builder().role(p.getRole()).content(p.getContent()).build();
+                Object content=p.getContent();
+                String content2="";
+                if (content instanceof String) {
+                    content2=(String) content;
+                }else if (content instanceof byte[]) {
+                    content2=new String((byte[]) content);
+                }else {
+                    content2=content.toString();
+                }
+                Message userMsg = Message.builder().role(p.getRole()).content(content2).build();
                 messages.add(userMsg);
             }
         }
@@ -503,14 +525,29 @@ public class DashsCopeServiceImpl implements DashsCopeService {
         for (int kt = 0; kt < messageList.size(); kt++) {
             AiChatSseConnectMessageParams p = messageList.get(kt);
             if (p != null) {
-                List<Map<String, Object>> content = new ArrayList<>();
-                Map<String, Object> map = new HashMap<>();
-                map.put("text", p.getContent());
-                content.add(map);
-                MultiModalMessage message = MultiModalMessage.builder()
-                        .role(p.getRole())
-                        .content(content).build();
-                messages.add(message);
+                Object contentObj=p.getContent();
+                if(contentObj instanceof String){
+                    List<Map<String, Object>> content = new ArrayList<>();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("text", (String)contentObj);
+                    content.add(map);
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content(content).build();
+                    messages.add(message);
+                }else if(contentObj instanceof List){
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content((List<Map<String, Object>>) contentObj).build();
+                    messages.add(message);
+                }else if(contentObj instanceof Map){
+                    List<Map<String, Object>> content = new ArrayList<>();
+                    content.add((Map<String, Object>) contentObj);
+                    MultiModalMessage message = MultiModalMessage.builder()
+                            .role(p.getRole())
+                            .content(content).build();
+                    messages.add(message);
+                }
             }
         }
 
@@ -579,16 +616,7 @@ public class DashsCopeServiceImpl implements DashsCopeService {
                                 chatMessage.setRole(message.getRole());
                                 List<Map<String, Object>> content = message.getContent();
                                 if (content != null && !content.isEmpty()) {
-                                    Map<String, Object> m0 = content.get(0);
-                                    if (m0 != null) {
-                                        Object text = m0.get("text");
-                                        if (text instanceof String) {
-                                            chatMessage.setContent((String) text);
-                                        } else {
-                                            String msg = JSON.toJSONString(text);
-                                            chatMessage.setContent(msg);
-                                        }
-                                    }
+                                    chatMessage.setContent(content);
                                 }
                                 chatMessage.setReasoningContent(message.getReasoningContent());
                                 chatMessage.setToolCalls(message.getToolCalls());

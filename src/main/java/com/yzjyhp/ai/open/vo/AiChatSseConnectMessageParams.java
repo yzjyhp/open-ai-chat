@@ -16,7 +16,7 @@ public class AiChatSseConnectMessageParams {
     @ApiModelProperty("角色")
     private String role;
     @ApiModelProperty("提示词")
-    private String content;
+    private Object content;
     @ApiModelProperty("思考信息(保存记录的时候可能有)")
     private String reasoning;
 
